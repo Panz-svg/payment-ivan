@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pembayaran Multi-Tema</title>
+  <style>
+    :root {
+      --bg-color: #101820;
+      --text-color: #ffffff;
+      --button-bg: #1e2a38;
+      --button-hover: #00c18b;
+      --accent: #00ffc3;
+      --toast-bg: #00ffc3;
+      --toast-text: #000000;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 30px 20px;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--accent);
+    }
+    .typewriter {
+  font-size: clamp(14px, 4vw, 24px);
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 2px solid var(--accent);
+  animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+  color: var(--accent);
+}
+
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
+    select {
+      margin-bottom: 25px;
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      background-color: var(--button-bg);
+      color: var(--text-color);
+    }
+
+    .wallet-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .button {
+      background: var(--button-bg);
+      border-radius: 15px;
+      padding: 15px;
+      border: none;
+      font-size: 18px;
+      color: var(--text-color);
+      cursor: pointer;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .button:hover {
+      background: var(--button-hover);
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0, 255, 200, 0.3);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      background: var(--toast-bg);
+      color: var(--toast-text);
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-size: 16px;
+      animation: fadeUp 0.5s ease;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .qris-container {
+      margin-top: 40px;
+    }
+.qris-img {
+  width: 300px;
+  height: 300px;
+  border-radius: 20px;
+  border: 3px solid var(--accent);
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 255, 200, 0.3);
+  animation: pulse 2.5s infinite;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+    
+
+    .open-app {
+      margin-top: 15px;
+      display: none;
+    }
+
+    .open-app button {
+      background: var(--accent);
+      color: #000;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .open-app button:hover {
+      background: var(--button-hover);
+    }
+@media (max-width: 500px) {
+  .wallet-buttons {
+    max-width: 90%;
+  }
+
+  .qris-img {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+    
+    @keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 255, 200, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 10px rgba(0, 255, 200, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 255, 200, 0);
+  }
+}
+
+.qris-img {
+  width: 200px;
+  height: 200px;
+  border-radius: 20px;
+  border: 3px solid var(--accent);
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgba(0, 255, 200, 0.3);
+  animation: pulse 2.5s infinite;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.qris-img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.7);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 255, 200, 0.5);
+  animation: fadeUp 0.3s ease;
+  cursor: zoom-out;
+}
+  </style>
+</head>
+<body>
+
+<div class="typewriter">Web Payment Ivan</div>
+  <h1>Pembayaran</h1>
+
+  <select id="themeSelector" onchange="gantiTema()">
+    <option value="dark">🌑 Dark</option>
+    <option value="light">🌕 Light</option>
+    <option value="neon">🟣 Neon</option>
+    <option value="sky">🟦 Blue Sky</option>
+    <option value="red">❤️ Red Passion</option>
+  </select>
+
+  <div class="wallet-buttons">
+    <button class="button" onclick="copyNumber('DANA')">Bayar via DANA</button>
+    <button class="button" onclick="copyNumber('GoPay')">Bayar via GoPay</button>
+    <button class="button" onclick="copyNumber('OVO')">Bayar via OVO</button>
+  </div>
+
+  <div class="open-app" id="openAppContainer">
+    <button id="openAppButton" onclick="bukaApp()">Buka Aplikasi</button>
+  </div>
+
+  <div class="qris-container">
+    <h2>Atau Scan QRIS</h2>
+<img src="https://img1.pixhost.to/images/6514/611469254_imgtmp.jpg" alt="QRIS Ivan" class="qris-img" />
+  </div>
+
+<div id="qrisOverlay" class="overlay" onclick="tutupOverlay()">
+  <img id="qrisFull" src="https://img1.pixhost.to/images/6514/611469254_imgtmp.jpg" alt="QRIS Full" />
+</div>
+
+  <script>
+    const nomor = "085816942565";
+    let currentLink = "";
+
+    const themes = {
+      dark: {
+        "--bg-color": "#101820",
+        "--text-color": "#ffffff",
+        "--button-bg": "#1e2a38",
+        "--button-hover": "#00c18b",
+        "--accent": "#00ffc3",
+        "--toast-bg": "#00ffc3",
+        "--toast-text": "#000000"
+      },
+      light: {
+        "--bg-color": "#f4f4f4",
+        "--text-color": "#000000",
+        "--button-bg": "#ffffff",
+        "--button-hover": "#ddd",
+        "--accent": "#0077cc",
+        "--toast-bg": "#0077cc",
+        "--toast-text": "#ffffff"
+      },
+      neon: {
+        "--bg-color": "#1a001a",
+        "--text-color": "#f0f0ff",
+        "--button-bg": "#400060",
+        "--button-hover": "#d000ff",
+        "--accent": "#ff00cc",
+        "--toast-bg": "#ff00cc",
+        "--toast-text": "#000000"
+      },
+      sky: {
+        "--bg-color": "#e0f7ff",
+        "--text-color": "#003344",
+        "--button-bg": "#ffffff",
+        "--button-hover": "#99e6ff",
+        "--accent": "#0099cc",
+        "--toast-bg": "#0099cc",
+        "--toast-text": "#ffffff"
+      },
+      red: {
+        "--bg-color": "#330000",
+        "--text-color": "#ffdddd",
+        "--button-bg": "#660000",
+        "--button-hover": "#ff4444",
+        "--accent": "#ff2222",
+        "--toast-bg": "#ff2222",
+        "--toast-text": "#ffffff"
+      }
+    };
+
+    function applyTheme(theme) {
+      const root = document.documentElement;
+      const t = themes[theme];
+      for (let key in t) {
+        root.style.setProperty(key, t[key]);
+      }
+    }
+
+    function gantiTema() {
+      const selected = document.getElementById("themeSelector").value;
+      applyTheme(selected);
+    }
+
+    function copyNumber(wallet) {
+      navigator.clipboard.writeText(nomor).then(() => {
+        showToast(`Nomor ${wallet} (${nomor}) telah disalin ✅`);
+        showOpenApp(wallet);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerText = message;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 500);
+      }, 2500);
+    }
+
+    function showOpenApp(wallet) {
+      const openAppContainer = document.getElementById("openAppContainer");
+      const openAppButton = document.getElementById("openAppButton");
+
+      if (wallet === "DANA") {
+        currentLink = `dana://send?phone=${nomor}`;
+      } else if (wallet === "GoPay") {
+        currentLink = `https://link.gopay.com/?phone=${nomor}`;
+      } else {
+        currentLink = "";
+      }
+
+      if (currentLink) {
+        openAppContainer.style.display = "block";
+        openAppButton.innerText = `Buka Aplikasi ${wallet}`;
+      } else {
+        openAppContainer.style.display = "none";
+      }
+    }
+
+    function bukaApp() {
+      if (currentLink) {
+        window.location.href = currentLink;
+      }
+    }
+    
+    function bukaOverlay() {
+  document.getElementById('qrisOverlay').style.display = 'flex';
+}
+
+function tutupOverlay() {
+  document.getElementById('qrisOverlay').style.display = 'none';
+}
+
+    applyTheme("dark");
+  </script>
+
+</body>
+</html>
